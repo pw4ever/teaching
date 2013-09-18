@@ -1,0 +1,451 @@
+\documentclass[beamer]{standalone}
+
+
+\begin{document}
+\mode* % ignore non-frame text
+
+\frame{\titlepage}
+
+\begin{frame}
+  we are going to address two things today
+  \begin{itemize}
+  \item \alert{understand} BST
+  \item \alert{how} to write (pseudo)code
+    \begin{itemize}
+    \item a.k.a., how to \alert{ace} quizzes
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% \begin{frame}
+%   \relax
+%   {\centering
+%     let us start by reviewing some of the concepts and topics\\
+%   }
+% \end{frame}
+
+
+\begin{frame}
+  \relax
+  {\centering
+    let us try \alert{understanding BST} first\\
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{motivation}
+  \only<+-+(1)>{
+    \framesubtitle{order}
+    
+    \alert{which} of the following two ways is faster for understanding the word ``asymptotic?'' \alert{why}?
+    \begin{itemize}
+    \item look up in a \alert{bound} dictionary.
+    \item sift through pages of a dictionary, \alert{unbound and shuffled}.
+    \end{itemize}
+    \vspace*{2ex}
+    {\centering
+      please do not cheat by saying ``I googled it''\smiley\\
+    }
+  }
+  \only<+>{
+    \relax
+    \vspace*{4ex}
+    {\centering
+      order helps us speed up many tasks, e.g., linear vs. binary search\\
+      \alert{order matters!}\\
+    }
+  }
+
+  \only<+>{
+    \framesubtitle{the best of two worlds}
+    \begin{itemize}
+    \item sorted array
+      \begin{itemize}
+      \item fast: search ($O(\lg n)$)
+      \item slow: insertion/deletion ($O(n)$)
+      \end{itemize}
+    \item unsorted linked list
+      \begin{itemize}
+      \item fast: insertion/deletion ($O(1)$\footnote{$O(1)$ for deletion is based on the assumption that the element to be deleted has already been located. otherwise, it is dominated by the $O(n)$ search to locate it.})
+      \item slow: search ($O(n)$)
+      \end{itemize}
+    \end{itemize}
+    \vspace*{4ex}
+    {\centering
+      how to do fast \alert{search} and \alert{insertion/deletion} at the \alert{same time}?\\
+    }
+  }
+
+  \only<+-+(1)>{
+    think: what \alert{structural properties} make \alert{search} and \alert{insertion/deletion} fast?
+  }
+  \only<+>{
+    \relax
+    \vspace*{4ex}
+    \begin{itemize}
+    \item insertion/deletion: pointers
+    \item search: the ability to quickly find the median of smaller/larger numbers 
+    \end{itemize}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{binary search tree (BST)}
+  \only<+>{
+    BSTs embody these structural properties
+    \begin{itemize}
+    \item use \alert{pointers} to organize dynamic structure
+    \item point to (hopefully) \alert{median} of smaller/larger numbers
+      \begin{itemize}
+      \item the catch is that it is \alert{nontrivial} to maintain the ``point-to-median'' property
+      \item vanilla BST is at the mercy of insertion/deletion order
+      \item self-balancing BSTs\footnote{\url{http://goo.gl/7Kap2q}} (e.g., red-black tree and splay tree) try harder to come closer to the ideal
+      \end{itemize}
+    \end{itemize}
+  }
+  \only<+>{
+    \framesubtitle{definition}
+    BST is a \alert{tree} \alert{plus} the BST \alert{order property}
+    \begin{itemize}
+    \item \alert{smaller} nodes are on the \alert{left} subtree
+    \item \alert{larger} nodes are on the \alert{right} subtree
+    \end{itemize}
+    what makes BST fast
+    \begin{itemize}
+    \item operations descend through the tree hierarchy
+    \item therefore, complexity is dominated by the \alert{height} of tree
+    \item many tree has a height of $O(\lg n)$
+    \end{itemize}
+    \vspace*{2ex}
+    the \alert{recursive} nature of trees makes it natural to process BST \alert{recursively}
+  }
+  \only<+>{
+    \framesubtitle{supported operations and algorithmic solutions}
+    \begin{itemize}
+      % \footnotesize
+    \item walk ($O(n)$): properly schedule visit to \alert{this}, \alert{left}, and \alert{right}
+    \item minimum/maximum ($O(\lg n)$\footnote{time complexity for (almost) perfectly balanced BST; skewed BST can degenerate to O(n); same comment applies for following cases}): find leftist/rightest node
+    \item search ($O(\lg n)$): go left/right for smaller/larger node
+    \item predecessor/successor ($O(\lg n)$): find the maximum/minimum in left/right subtree \emph{or} the \alert{first} smaller/larger ancestor
+    \item insert ($O(\lg n)$): search proper position and put in place
+    \item delete ($O(\lg n)$): move predecessor or successor here
+    \end{itemize}
+  }
+\end{frame}
+
+\begin{frame}
+  \relax
+  {\centering
+    now, let us see \alert{how} to write (pseudo)code\\
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{technique}
+  \begin{itemize}
+  \item strategy vs tactic
+    \begin{itemize}
+    \item strategy: program organization and interface specification
+    \item tactic: fleshing out details
+    \end{itemize}
+  \item get big picture right before messing with details
+    \begin{itemize}
+    \item translate English logical structure to code template
+      \begin{itemize}
+      \item identifying common patterns: conditionals, iterations, recursions
+      \end{itemize}
+    \item write code by layers
+      \begin{itemize}
+      \item example: C programmers write ``\{'' and ``\}'' in pairs
+      \end{itemize}
+    \end{itemize}
+  \item wishful thinking
+    \begin{itemize}
+    \item treat other procedures (even unfinished) as blackboxs
+    \item reveal which procedures need to be written
+    \end{itemize}
+  \item ``premature optimization is the root of all program evils''
+    \begin{itemize}
+    \item write simple/clean code first before going for performance
+    \item do not rush for iteration if recursion is straightforward
+      \begin{itemize}
+      \item some recursions can be translated to iterations by simulating stacks
+      \item some language compilers can automatically optimize tail recursions to iterations
+      \end{itemize}
+
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{to see is to believe}
+  \begin{itemize}
+  \item C is not a good language for learning algorithm
+    \begin{itemize}
+    \item it forces you to think at a relatively low abstraction level
+    \item you have to fiddle with memory (de)allocation if you go beyond static data structures
+    \item it is more like sugar-coated assembly
+    \item nevertheless, it is the status quo in system programming and you have no other choice if you hack\footnote{\url{http://goo.gl/6pazHs}} Linux kernel
+    \end{itemize}
+  \item \alert{Python} is a popular alternative; \alert{Scheme} is an excellent choice
+  \item I am going to show you how I code BST in \alert{Common Lisp}
+  \item if you do not speak Common Lisp, treat it as a kind of \alert{executable pseudo-code}
+  \item the point is to demonstrate the \alert{process} of coding
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{caveat emptor}
+  \begin{quote}
+    Thus, programs must be written for people to read, and only incidentally for machines to execute.\\
+    \flushright Abelson, Sussman \& Sussman, \emph{SICP}\footnote{\url{http://goo.gl/O4Iq1P}}
+  \end{quote}
+  \vspace*{4ex}
+
+  \begin{itemize}
+  \item the code you are about to see are optimized for readability/simplicity, not performance
+  \item you do not have to memorize the code, it is easier to reinvent the code than to memorize it \alert{once you understand it}
+  \item nevertheless, follow the procedure once or twice just for the experience
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{know what to do}
+  \begin{itemize}
+  \item nodes in BST have:
+    \begin{itemize}
+    \item \alert{value}
+    \item \alert{left} and \alert{right children}
+    \item (optional) \alert{parent}
+    \end{itemize}
+  \item BST encodes order, so can be used for querying:
+    \begin{itemize}
+    \item  \alert{minimum} and \alert{maximum}
+    \item \alert{predecessor} and \alert{successor}
+    \end{itemize}
+  \item constructing/manipulating BST require:
+    \begin{itemize}
+    \item \alert{inserting} a node
+    \item \alert{deleting} a node
+    \end{itemize}
+    that \alert{preserve BST order property}
+  \item \alert{search} a node with a given value
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \relax
+  {\centering
+    let us get started now\\
+  }
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{running example}
+  {\centering
+    \includegraphics[width=0.7\textwidth]{example.png}\\
+    CLRS3 Figure 12.2 on Page 209\\
+  }
+\end{frame}
+
+\begin{frame}[label=Q2]
+  \frametitle{Exercise}
+
+  \begin{myexer}
+    given a BST (e.g., the running example), find \alert{an} order of insertions that construct that tree
+    {\centering
+      \includegraphics[width=0.7\textwidth]{example.png}\\
+    }
+  \end{myexer}
+
+  {\centering
+    \myinternalxref{A2}{Solution}\\
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{auxiliaries}
+  \only<+>{
+    \framesubtitle{definition}
+    {\centering
+      \includegraphics[width=0.7\textwidth]{bst-node-defstruct.png}\\
+      the hairy stuff in the middle is for ``pretty printing'' the structure\\
+    }
+  }
+  \only<+>{
+    \framesubtitle{pretty printing}
+    {\centering
+      \includegraphics[width=0.5\textwidth]{example.png}\\
+      \includegraphics[width=0.5\textwidth]{bst-node-pprint.png}\\
+    }
+  }
+  \only<+>{
+    \framesubtitle{build BST from values}
+    {\centering
+      \includegraphics[width=0.7\textwidth]{build-bst-from-values.png}\\
+    }
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{preorder, inorder, and postorder walk}
+  {\centering
+    \includegraphics[width=0.7\textwidth]{bst-walk.png}\\
+  }
+\end{frame}
+
+\begin{frame}[label=Q1]
+  \frametitle{Exercise}
+
+  \begin{myexer}
+    which one among preorder, inorder, and postorder walk is equivalent to sorting?
+  \end{myexer}
+
+  {\centering
+    \myinternalxref{A1}{Solution}\\
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{minimum/maximum and predecessor/successor}
+  \only<+>{
+    {\centering
+      \includegraphics[width=0.7\textwidth]{bst-minmax-predsucc.png}\\
+    }
+  }
+  \only<+>{
+    {\centering
+      \includegraphics[width=0.7\textwidth]{bst-minmax-predsucc-result.png}\\
+    }
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{search a node}
+  \only<+>{
+    {\centering
+      \includegraphics[width=0.7\textwidth]{bst-search-node.png}\\
+    }
+  }
+  \only<+>{
+    {\centering
+      \includegraphics[width=0.7\textwidth]{bst-search-node-result.png}\\
+    }
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{insert a node}
+  \only<+>{
+    {\centering
+      \includegraphics[width=0.7\textwidth]{bst-insert-node.png}\\
+    }
+  }
+  \only<+>{
+    {\centering
+      Q: what is the process of building a tree from the sequence 5, 3, 2, 6, 9, 8, and 7?\\
+    }
+  }
+  \only<+>{
+    {\centering
+      \includegraphics[width=0.7\textwidth]{bst-insert-node-result.png}\\
+    }
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{delete a node}
+  \only<+>{
+    {\centering
+      \includegraphics[height=0.85\textheight]{clrs3-fig12-4.png}\\
+      CLRS3 Figure 12.4 on Page 297\\
+    }
+  }
+  \only<+>{
+    {\centering
+      \includegraphics[width=0.7\textwidth]{bst-delete-node.png}\\
+    }
+  }
+  \only<+>{
+    {\centering
+      Q: What is the process of deleting 15, 18, and 13 in order from the running example\\[3ex]
+      \includegraphics[width=0.7\textwidth]{example.png}\\
+    }
+  }
+  \only<+>{
+    {\centering
+      \includegraphics[width=0.7\textwidth]{bst-delete-node-result.png}\\
+    }
+  }
+\end{frame}
+
+\begin{frame}
+  \relax
+  {\centering
+    Q \& A\\
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{to try the code, follow the instruction}
+  \only<+>{\centering
+    \url{https://github.com/pw4ever/cl-algo-n-struct}
+  }
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \relax
+  {\centering
+    reference solution\\
+  }
+\end{frame}
+
+%\section{exercises}
+
+% \begin{frame}[label=Q1]
+%   \frametitle{Exercise}
+
+%   \begin{myexer}
+%   \end{myexer}
+
+%   {\centering
+%     \myinternalxref{S1}{Solution}\\
+%   }
+% \end{frame}
+
+% \begin{frame}[label=A1]
+%   \frametitle{Solution to \myinternalxref{Q1}{Exercise}}
+%   \begin{proof}
+    
+%   \end{proof}
+% \end{frame}
+
+\begin{frame}[label=A2]
+  \frametitle{Solution to \myinternalxref{Q2}{Exercise}}
+  \begin{proof}
+    (hint) later-inserted elements go \alert{down} along the tree hierarchy. therefore, parents are inserted earlier than children.
+
+    \alert{``an''} rather than \alert{``the''} order: sibling insertion order can be arbitrary
+
+    \alert{a} solution: pre-order walk
+  \end{proof}
+\end{frame}
+
+\begin{frame}[label=A1]
+  \frametitle{Solution to \myinternalxref{Q1}{Exercise}}
+  \begin{proof}
+    let us see.\\[4ex]
+    {\centering
+      \includegraphics[width=0.7\textwidth]{bst-walk-result.png}\\
+    }
+  \end{proof}
+\end{frame}
+
+
+
+
+\end{document}

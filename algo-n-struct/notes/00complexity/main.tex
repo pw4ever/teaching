@@ -1,0 +1,415 @@
+\documentclass[beamer]{standalone}
+
+
+\begin{document}
+\mode* % ignore non-frame text
+
+\frame{\titlepage}
+
+\begin{frame}
+  \relax
+  {\centering
+    let us start by reviewing some of the concepts and topics\\
+  }
+\end{frame}
+
+%\section{review}
+\begin{frame}
+  \frametitle{data structure and algorithm}
+  \begin{itemize}
+  \item data structure
+    \begin{itemize}
+    \item organize \& abstract relationship between elements
+    \item \alert{bridge} the gap between \alert{ideals} and \alert{reality}
+      \begin{itemize}
+      \item mathematical \alert{ideals}: sets, mappings, graphs
+      \item computational \alert{reality}: memory cells (``variables'') and addressing modes (``pointers'')
+      \item lists, arrays, stacks, queues, heaps, hashes, trees, graphs
+      \end{itemize}
+    \item different tradeoffs
+    \end{itemize}
+  \item algorithm
+    \begin{itemize}
+    \item specify \alert{procedure} for solving \alert{concrete} problems in \alert{finite} steps
+    \item procedure vs. process
+      \begin{itemize}
+      \item much like in magic
+      \item procedure: the incantation---what is being chanted
+      \item process: the magic---what is going to happen
+      \end{itemize}
+    \item \alert{algorithm} describes procedure
+    \item \alert{execution of algorithm} produces process
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+%\section{exercises}
+
+\begin{frame}
+  \frametitle{key topics}
+  \begin{itemize}
+  \item correctness proof
+    \begin{itemize}
+    \item formulate target as $P(n)$ property; establish basic cases (e.g., ``$P(1)$ true''); show ``$P(k)$ true'' $\Rightarrow$ ``$P(k+1)$ true;'' show it terminate eventually.
+    \item based on \alert{mathematical induction}
+    \end{itemize}
+  \item asymptotic complexity, a.k.a, ``big O'' \& company
+    \begin{itemize}
+    \item asymptotic? $\Rightarrow$ when \alert{input size} approaches $\infty$
+    \item why? establish efficiency with relation to some \alert{simple} growth rate like $1$, $\lg n$, $n$, $n\lg n$, $n^k$, and $2^n$
+    \item the point is \alert{simplification}
+    \item nemonics: $o \Leftrightarrow <$, $O\Leftrightarrow\leq$, $\Theta\Leftrightarrow=$, $\Omega\Leftrightarrow\geq$, $\omega\Leftrightarrow>$
+    \end{itemize}
+  \item divide-and-conquer
+    \begin{itemize}
+    \item divide: divide big problem into (similar but) small ones
+    \item conquer: combine small solutions into a big one
+    \item complexity is determined by: \alert{how many sub-cases} and \alert{efficiency of ``conquer''}
+    \item cf Section 4.5 ``The master method for solving recurrences''
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+   \relax
+  {\centering
+    keep the following tips in mind while solving problems\\    
+  } 
+\end{frame}
+
+\begin{frame}
+  \frametitle{problem solving strategies}
+  \begin{itemize}
+  \item get \alert{elements} right
+    \begin{itemize}
+    \item \alert{vocabulary}: identifying \alert{basic ingriendts} to work on
+      \begin{itemize}
+      \item numbers, characters, arrays, pointers, unions, structures
+      \end{itemize}
+    \item \alert{combination}: making \alert{complex things} out of basic ingredients
+      \begin{itemize}
+      \item arithmetics, conditionals, iterations
+      \end{itemize}
+    \item \alert{abstraction}: \alert{naming and conquering} complex things
+      \begin{itemize}
+      \item variables, functions, pointers
+      \end{itemize}
+    \end{itemize}
+  \item \alert{means}-\alert{ends} analysis
+    \begin{itemize}
+    \item ends: where are you heading? 
+    \item means: what do you have?
+    \item use means to reach ends
+    \end{itemize}
+  \item iterative problem solving
+    \begin{itemize}
+    \item solving problems in multiple \alert{top-down} iterations
+    \item get the approach right \alert{before} messing with the details
+    \item ``wishful thinking''
+      \begin{itemize}
+      \item \alert{if only} i can ``merge'' many sorted sequences into one\ldots
+      \end{itemize}
+    \item pseudocode frees us from low-level details (for now)
+    \item \alert{fail to do so is why (some of) you failed the quizzes}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{the rest of this recitation session\ldots}
+  \ldots is on understanding and solving two types of problems:
+  \begin{itemize}
+  \item asymptotic complexity: why and how
+  \item mergesort: divide-and-conque, recursion, merge, pseudocode
+  \end{itemize}
+  we TAs (Yuan Cao and Wei Peng) divide (and conquer) the job as follows:
+  \begin{itemize}
+  \item asymptotic complexity: Wei
+  \item mergesort: Yuan
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{asymptotic complexity}
+  \framesubtitle{definition}
+  for \alert{nonnegative} functions $f(n)$ and $g(n)$, $f(n)=\Theta(g(n))$ is defined as:
+  \begin{mydef}
+    $\exists$ \alert{positive} constants $c_1$, $c_2$ and $N_0$, so that for $\forall n\geq N_0$: \[0\leq c_1g(n)\leq f(n)\leq c_2g(n).\] 
+  \end{mydef}
+
+  \vspace{3ex}
+  \begin{itemize}
+  \item $f(n)=O(g(n))$ and $f(n)=\Omega(g(n))$ are defined as above by omitting the $c_1$ and $c_2$ cases, respectively.
+  \item $f(n)=o(g(n))$ and $f(n)=\omega(g(n))$ are defined as $f(n)=O(g(n))$ and $f(n)=\Omega(g(n))$ by omitting the ``='' case.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{about asymptotic complexity}
+  \begin{itemize}
+  \item why
+    \begin{itemize}
+    \item besides \emph{correctness}, \alert{efficiency} also matters
+    \item example: cracking encryption keys
+      \begin{itemize}
+      \item theory: brute-force can find any key eventually
+      \item practice: 2048-bit RSA keys are sufficiently safe\footnote{\scriptsize\ldots until 2030, according to \url{http://goo.gl/cc6UeQ}}
+      \end{itemize}
+    \item asymptotic complexity captures \alert{dominating} features of efficiency\ldots
+    \item \ldots by relating to simple ``complexity classes''
+    \end{itemize}
+  \item tricks
+    \begin{itemize}
+    \item ``asymptotic'' reads as ``when $n$ (input size) approaches \infty''
+    \item nemonics: $o \Leftrightarrow <$, $O\Leftrightarrow\leq$, $\Theta\Leftrightarrow=$, $\Omega\Leftrightarrow\geq$, $\omega\Leftrightarrow\geq$
+    \item simple classes (in \emph{increasing} asymptotic complexity): $1$, $\lg n$, $n^k (k>0)$, $a^n (a>1)$
+    \end{itemize}
+  \item intuition
+    \begin{itemize}
+    \item $\Theta(g(n))$ $\Rightarrow$ the class/collection of functions (of $n$) that run \alert{as fast as} (but \alert{not faster}) than $g(n)$ \alert{when $n$ is large enough}
+    \item $f(n)=\Theta(g(n))$ $\Rightarrow$ $f(n)$ is one such aforementioned function
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% \begin{frame}[label=Q1]
+%   \frametitle{Exercise 1}
+
+%   \begin{myexer}
+%   \end{myexer}
+
+%   {\centering
+%     \myinternalxref{A1}{Solution}\\
+%   }
+% \end{frame}
+
+\begin{frame}[label=Q0]
+  \frametitle{Exercise 0}
+
+  \begin{myexer}
+    Let us ease into the discussion by revisiting a familiar problem.
+
+    Show that $\max(f(n), g(n))=\Theta(f(n)+g(n)).$
+  \end{myexer}
+
+  {\centering
+    \myinternalxref{A0}{Solution}\\
+  }
+\end{frame}
+
+\begin{frame}[label=Q1]
+  \frametitle{Exercise 1}
+
+  \begin{myexer}
+    Shows that \[0<\lim_{n\to\infty}\frac{f(n)}{g(n)}=c<\infty\] implies $f(n)=\Theta(g(n))$ (and hence trivally $f(n)=O(g(n))$ $f(n)=\Omega(g(n))$ by the ``='' case in the definition). 
+  \end{myexer}
+
+  \vspace{3ex}
+  Show these to yourself.
+  \begin{itemize}
+  \item $\lim_{n\to\infty}\frac{f(n)}{g(n)}=0$ implies $f(n)=o(g(n))$.
+  \item $\lim_{n\to\infty}\frac{f(n)}{g(n)}=\infty$ implies $f(n)=\omega(g(n))$.
+  \end{itemize}
+  
+  {\centering
+    \myinternalxref{A1}{Solution}\\
+  }
+\end{frame}
+
+\begin{frame}[label=Q2]
+  \frametitle{Exercise 2}
+
+  \begin{myexer}
+    Let
+    \begin{itemize}
+    \item $\Theta(f(n))<\Theta(g(n))$ mean $f(n)=O(g(n))$ and (equivalently) $g(n)=\Omega(f(n))$
+    \item $\Theta(f(n))=\Theta(g(n))$ mean $f(n)=\Theta(g(n))$ and (equivalently) $g(n)=\Theta(f(n))$
+    \end{itemize}
+    Ordering the following asymptotic complexity $\Theta(f(n))$ classes by the $<$ and $=$ relations: \[\Theta(3^n), \Theta(2^n), \Theta(\lg n), \Theta(n^{1.1}), \Theta(n^{0.9}), \Theta(\lg\lg n), \Theta(n\lg n).\]
+  \end{myexer}
+
+  {\centering
+    \myinternalxref{A2}{Solution}\\
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{some facts to know}
+  \[
+  e^x=\sum_{i=0}^\infty\frac{x^i}{i!} \quad\mathrm{and}\quad e^x=\lim_{n\to\infty}(1+\frac{x}{n})^n.
+  \]
+  \begin{itemize}
+  \item (for $|x|<1$) $1+x\leq e^x\leq 1+x+x^2$
+  \item (for $x\to 0$) $e^x=1+x+\Theta(x^2)$
+  \end{itemize}
+  
+  Stirling's approximation:
+  \[
+  n!=\sqrt{2\pi n}\left(\frac{n}{e}\right)^n(1+\Theta(\frac{1}{n})) \quad\mathrm{and}\quad n!=\sqrt{2\pi n}\left(\frac{n}{e}\right)^ne^{\alpha_n}
+  \]
+  where $\frac{1}{12n+1}<\alpha_n<\frac{1}{12n}$.
+  \begin{itemize}
+  \item $\lg(n!)=\Theta(n\lg n)$
+  \end{itemize}
+
+  {
+    \centering
+    Section 3.2 has a treasure of these facts.\\
+  }
+\end{frame}
+
+\begin{frame}[label=Q3]
+  \frametitle{Exercise 3}
+
+  \begin{myexer}
+    Knowing the Sterling's approximation:
+    \[
+    n!=\sqrt{2\pi n}\left(\frac{n}{e}\right)^n(1+\Theta(\frac{1}{n})),
+    \]
+    Show that
+    \[
+    n!=o(n^n)\qquad n!=\omega(2^n).
+    \]
+  \end{myexer}
+
+  {\centering
+    \myinternalxref{A3}{Solution}\\
+  }
+\end{frame}
+
+\begin{frame}[label=Q4]
+  \frametitle{Exercise 4}
+
+  \begin{myexer}
+    Is the $c_1/c_2/N_0$ asymptotic complexity obsolete? Not so.
+
+    Show the following two statements are equivalent:
+    \begin{itemize}
+    \item $f(n)$ is \alert{polynomially bounded}: $f(n)=O(n^a)$ for some $a>0$.
+    \item $lg(f(n))=O(\lg n)$.
+    \end{itemize}
+  \end{myexer}
+
+  {\centering
+    \myinternalxref{A4}{Solution}\\
+  }
+\end{frame}
+
+\begin{frame}
+  \relax
+  {
+    \centering
+    \LARGE
+    Q \& A\\
+  }
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \relax
+  {
+    \centering
+    below are reference answers\\
+  }
+\end{frame}
+
+% \begin{frame}[label=A1]
+%   \frametitle{Answer to \myinternalxref{Q1}{Exercise 1}}
+%   \begin{proof}
+    
+%   \end{proof}
+% \end{frame}
+
+\begin{frame}[label=A0]
+  \frametitle{Answer to \myinternalxref{Q0}{Exercise 0}}
+  \begin{proof}
+    \small
+    Let me show you my thought process.
+
+    $\max(f(n), g(n))$ is clumsy to work with $\rightarrow$ simplify it by case analysis.
+    \[
+    \max(f(n), g(n))=
+    \begin{cases}
+      f(n) & \text{if } f(n)\geq g(n)\geq 0 \\
+      g(n) & \text{if } 0\leq f(n)< g(n)
+    \end{cases}.
+    \]
+
+    This is better. Now we deal with each case separately. 
+
+    Take the $f(n)\geq g(n)\geq 0$ case for a start. (Means-ends analysis) By the definition of asymptotic complexity, we are trying to establish relationship between $f(n)$ and $f(n)+g(n)$ under the assumption $f(n)\geq g(n)\geq 0$. What can we do?
+
+    $f(n)\leq f(n)+g(n)$ is obvious. $f(n)=\frac{1}{2}(2f(n))=\frac{1}{2}(f(n)+f(n))\geq \frac{1}{2}(f(n)+g(n))$ is a little bit tricky, but not so much once you keep the ``ends'' in mind. 
+
+    The other case follows the same reasoning.
+  \end{proof}
+\end{frame}
+
+\begin{frame}[label=A1]
+  \frametitle{Answer to \myinternalxref{Q1}{Exercise 1}}
+  \begin{proof}
+    This is an exercise of recalling and applying definition.
+
+    Recall from Calculus classes, $0<\lim_{n\to\infty}\frac{f(n)}{g(n)}=c<\infty$ implies that for any $\epsilon>0$, we can find an $N(\epsilon)$ such that $\forall n\geq N(\epsilon)$, we have \[c-\epsilon<\frac{f(n)}{g(n)}<c+\epsilon.\]
+
+    Choose $\epsilon=c/2$, then by the aforementioned implication, $\exists N(c/2)$ such that $\forall n\geq N(c/2)$, we have
+\[
+\frac{1}{2}c=c-\frac{1}{2}c<\frac{f(n)}{g(n)}<c+\frac{1}{2}c=\frac{3}{2}c.
+\]
+
+Take $c_1=\frac{1}{2}c$, $c_2=\frac{3}{2}c$, and $N_0=N(c/2)$, we have our proof of $f(n)=\Theta(g(n))$.
+  \end{proof}
+\end{frame}
+
+
+\begin{frame}[label=A2]
+  \frametitle{Answer to \myinternalxref{Q2}{Exercise 2}}
+  \begin{proof}
+    \[\Theta(\lg\lg n)<\Theta(\lg n)<\Theta(n^{0.9})<\Theta(n\lg n)<\Theta(n^{1.1})<\Theta(2^n)<\Theta(3^n).\]
+
+    \myinternalxref{Q2}{Exercise 2} gives meanings to \myinternalxref{Q1}{Exercise 1}: It is not easy to find $c_1/c_2/N_0$ by hunch in these cases, but trivally to show the results by the limit form.
+
+    Example: $\lim_{n\to\infty}2^n/3^n=\lim_{n\to\infty}(2/3)^n=0$ implies that $2^n=o(3^n)$ and hence $\Theta(2^n)<\Theta(3^n)$ by our definition.
+
+    Another example: $\lim_{n\to\infty}(\lg\lg n)/\lg n=\lim_{k\to\infty}\lg k/k=0.$
+
+    \myinternalxref{Q2}{Exercise 2} helps us understand:
+    \begin{itemize}
+    \item any positive \alert{polynomial} function ($\Theta(n^a) (a>0)$) grows faster than any \alert{polylogarithmic} function ($\Theta(\lg^b n) (b>0)$)%: $\Theta(\lg^b n)<\Theta(n^a)$ for $a,b>0$.
+    \end{itemize}
+    %Because (let $k=\lg n$) 
+    since $\lim_{n\to\infty}\lg^bn/n^a=\lim_{k\to\infty}k^b/(2^k)^a=\lim_{k\to\infty}k^b/(2^a)^k=0.$
+  \end{proof}
+\end{frame}
+
+\begin{frame}[label=A3]
+  \frametitle{Answer to \myinternalxref{Q3}{Exercise 3}}
+  \begin{proof}
+    (Hint) Using the limit form from \myinternalxref{Q1}{Exercise 1}.
+  \end{proof}
+\end{frame}
+
+
+\begin{frame}[label=A4]
+  \frametitle{Answer to \myinternalxref{Q4}{Exercise 4}}
+  \begin{proof}
+    ``Show equivalence'' demands us to show \emph{bi-directional} implications.
+    \begin{itemize}
+    \item $f(n)=O(n^a)$ $\rightarrow$ $\exists c, N_0$ such that $\forall n>N_0$, $f(n)\leq cn^a$ $\rightarrow$ $\lg(f(n))\leq \lg(cn^a)=a\lg(cn)=a(\lg c+\lg n)=O(\lg n)$ $\rightarrow$ $\lg(f(n))=O(\lg n)$.
+    \item Similar for the reverse direction by taking exponentials.
+    \end{itemize}
+    
+    This exercise uses the $c_1/c_2/N_0$ definition of asymptotic complexity.
+  \end{proof}
+\end{frame}
+
+
+\end{document}
+
+
+
+
+
+

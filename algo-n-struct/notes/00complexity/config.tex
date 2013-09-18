@@ -1,0 +1,96 @@
+%% standalone
+\usepackage[subpreambles]{standalone}
+
+%% beamer settings
+
+%second mode
+\usepackage{pgfpages}
+%\setbeameroption{show notes on second screen=right}
+%\setbeameroption{second mode text on second screen=right}
+%\setbeameroption{always typeset second mode=true}
+%\setbeameroption{previous slide on second screen=right}
+
+
+% notes
+\mode<presentation>{
+  \setbeamertemplate{note page}[compress]
+  % \setbeameroption{hide notes}
+  % \setbeameroption{show notes}
+  % \usepackage{pgfpages}
+  % \setbeameroption{show notes on second screen=right}
+  % \setbeameroption{show only notes}
+
+  % outer theme
+  \usecolortheme{dove}
+  \useoutertheme{infolines}
+  \beamertemplatenavigationsymbolsempty
+
+  \setbeamercovered{transparent=20}
+  \setbeamercolor{alerted text}{fg=red!80!black}
+
+  \setbeamertemplate{frametitle}[default][center]
+  \setbeamerfont{frametitle}{size=\normalsize}
+  \setbeamerfont{framesubtitle}{size=\footnotesize}
+
+  \AtBeginPart{\frame{\partpage}\frame{\tableofcontents}}
+  \AtBeginSubsection{\frame{\tableofcontents[currentsection,currentsubsection]}}
+}
+
+
+%% font
+% serif
+
+% sans serif
+\usepackage[T1]{fontenc}
+\usepackage[default]{comfortaa}
+% \usepackage{arev}
+% \usepackage[T1]{fontenc}
+
+% use serif for math
+\usefonttheme[onlymath]{serif}
+
+% justified text % not good on slides
+%\renewcommand{\raggedright}{\leftskip=0pt \rightskip=0pt plus 0cm}
+
+%% figures
+% inline figures
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,calc}
+
+% external figures
+\usepackage{graphicx}
+\graphicspath{{./graph/}}
+%\DeclareGraphicsExtensions{.eps}
+\usepackage[caption=false,font=footnotesize]{subfig}
+
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools}
+\usepackage{cases}
+\usepackage{color,xcolor}
+
+%% misc
+\usepackage{algorithm}
+\usepackage[noend]{algorithmic}
+
+\usepackage{listings}
+
+\usepackage{fixltx2e}
+\usepackage{hyperref}
+\hypersetup{bookmarks=true}
+\usepackage{url}
+\usepackage{bookmark}
+
+\usepackage{microtype}
+
+\usepackage{xcolor}
+
+%\usepackage{paralist}
+%\usepackage{enumitem}
+
+%% my defs
+%\newcommand{\comment}[1]{\textcolor{blue}{#1}}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "slide"
+%%% End: 
