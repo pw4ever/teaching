@@ -1,0 +1,305 @@
+\documentclass[beamer]{standalone}
+
+
+\begin{document}
+\mode* % ignore non-frame text
+
+\frame{\titlepage}
+
+\begin{frame}
+  \relax
+  {\centering
+    quick review\\
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{red-black tree}
+  \relax
+  {\centering
+    red-black tree (RBT)\\=\\binary-search tree (BST)\\+\\red-black properties (RBP)\\
+  }
+\end{frame}
+
+\begin{frame}
+\frametitle{red-black properties}
+\begin{itemize}
+\item node either red or black
+\item \alert{root is black}
+\item every leaf is black
+\item \alert{red node has black children}
+\item black height the same
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{logarithmic height}
+  why?
+  \begin{itemize}
+  \item \alert{well-defined black height} forces a shape of a tree rather than a chain
+  \item \alert{abundance of blacks} force the tree height is as much as twice of black height
+  \end{itemize}
+  this gives good worst-case complexity
+\end{frame}
+
+\begin{frame}
+  \relax
+  {\centering
+    the key is to \alert{maintain RBP}\\
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{rotation}
+  \only<+>{
+    {\centering
+      \includegraphics[width=0.6\textwidth]{graph/rotate.png}\\
+      CLRS3 page 313, Figure 13.2\\
+      key: \alert{fix pointers}\\
+    }    
+  }
+  \only<+>{
+    {\centering
+      \includegraphics[width=0.8\textwidth]{graph/rotate-code.png}\\
+      CLRS3 page 313\\     
+    }
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{node insertion}
+  \only<+>{
+    \begin{itemize}
+    \item first a BST insertion
+    \item mark the new node \alert{red}
+    \item only ``red-parent-black-children'' and ``black root'' may be violated
+    \item \alert{fix them!}
+    \item remember to mark the root black
+    \end{itemize}
+  }
+  \only<+>{
+    {\centering
+      \includegraphics[height=0.8\textheight]{graph/rb-insert-fixup.png}\\
+      CLRS3 page 317, Figure 13.4\\
+      key: \alert{fix up by cases}\\
+    }    
+  }
+  \only<+>{
+    {\centering
+      \includegraphics[height=0.8\textheight]{graph/rb-insert-code.png}\\
+      CLRS3 page 315\\
+    }    
+  }
+  \only<+>{
+    {\centering
+      \includegraphics[height=0.8\textheight]{graph/rb-insert-fixup-code.png}\\
+      CLRS3 page 316\\
+    }    
+  }
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{node deletion}
+  \only<+>{
+    \begin{itemize}
+    \item  a BST deletion of node $z$, recall the cases:
+      \begin{itemize}
+      \item 2 ``easy'': $z$ has less than 2 children, $y$ is $z$
+      \item 1 ``intermediate'': successor $y$ is $z$'s immediate right child
+      \item 1 ``difficult'': successor $y$ is \emph{not} $z$'s immediate right child
+      \end{itemize}
+    \item keep track of $y$ and $x$ (the node that moves into $y$'s original place)
+      \begin{itemize}
+      \item beware if $y$ is $z$'s immediate right child
+      \end{itemize}
+    \item for ``{non-easy},'' color $y$ by $z$'s color
+    \item convince yourself why there is no violation if $y$ was red
+    \item possible violations if $y$ was black 
+      \begin{itemize}
+      \item for ``easy,'' $y$/$z$ was root, and a red child has replaced it
+      \item if $x$ and new $x.p$ ($y$ for ``intermediate'' and old $y.p$ for ``difficult'') are both red
+      \item for ``difficult,'' move $y$ might disturb balanced black height
+      \end{itemize}
+    \item fix violations
+    \end{itemize}
+  }
+
+  \only<+>{
+    {\centering
+      \includegraphics[height=0.8\textheight]{graph/rb-delete-fixup.png}\\
+      CLRS3 page 329, Figure 13.7\\
+      key: \alert{fix up by cases}\\
+    }    
+  }
+  \only<+>{
+    {\centering
+      \includegraphics[height=0.3\textheight]{graph/rb-delete-transplant-code.png}\\
+      CLRS3 page 323\\
+    }    
+  } 
+  \only<+>{
+    {\centering
+      \includegraphics[height=0.8\textheight]{graph/rb-delete-code.png}\\
+      CLRS3 page 324\\
+    }    
+  } 
+  \only<+>{
+    {\centering
+      \includegraphics[height=0.8\textheight]{graph/rb-delete-fixup-code.png}\\
+      CLRS3 page 326\\
+    }    
+  } 
+\end{frame}
+
+\begin{frame}
+  \relax
+  {\centering
+    so much for the review\\[3ex]
+    let us do some exercises\\
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{we can use some help in the exercises}
+  \relax
+  \only<+>{
+    {\centering
+      \url{https://github.com/pw4ever/pw-teaching-algo-n-struct}\\
+      \includegraphics[height=0.8\textheight]{graph/pw-t-as-github-1.png}\quad\includegraphics[height=0.8\textheight]{graph/pw-t-as-github-2.png}\\
+    }
+  }
+  \only<+>{
+    \centering
+    the setup is quite simple on a Linux VM\\
+    \includegraphics[height=0.8\textheight]{graph/setup-example.png}\\
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{get your paper and pen}
+  \begin{itemize}
+  \item start with an empty RBT $T$
+  \item shuffle 1 to 18 as an array $A[0..17]$
+  \item for $i$ from 0 to 2
+    \begin{itemize}
+    \item insert $A[6\times i..6\times i+5]$ into $T$
+    \item let us pick a node on $T$ and delete it
+    \end{itemize}
+  \end{itemize}
+  trace the whole process, see what is left
+\end{frame}
+
+\begin{frame}
+  \frametitle{create $T$ and pick $A$}
+  \only<+>{
+    \centering
+    \includegraphics[width=0.6\textwidth]{graph/exer-pick-a.png}\\
+  }  
+\end{frame}
+
+\begin{frame}
+  \frametitle{1st round}
+  \only<+>{
+    \centering
+    insert 15, 14, 18, 9, 6, and 16\\
+    \includegraphics[height=0.85\textheight]{graph/exer-1st-insert.png}\\
+  }  
+  \only<+>{
+    \centering
+    delete 18\\
+    \includegraphics[height=0.5\textheight]{graph/exer-1st-delete.png}\\
+  }  
+\end{frame}
+
+\begin{frame}
+  \frametitle{2nd round}
+  \only<+>{
+    \centering
+    insert 3, 11, 2, 4, 13, and 12\\
+    \includegraphics[height=0.85\textheight]{graph/exer-2nd-insert-1.png}\\
+  } 
+  \only<+>{
+    \centering
+    insert 3, 11, 2, 4, 13, and 12\\
+    \includegraphics[height=0.85\textheight]{graph/exer-2nd-insert-2.png}\\
+  }  
+  \only<+>{
+    \centering
+    delete 15\\
+    \includegraphics[height=0.85\textheight]{graph/exer-2nd-delete.png}\\
+  }  
+\end{frame}
+
+\begin{frame}
+  \frametitle{3rd round}
+  \only<+>{
+    \centering
+    insert 17, 1, 8, 10, 7, and 5\\
+    \includegraphics[height=0.85\textheight]{graph/exer-3rd-insert-1.png}\\
+  } 
+  \only<+>{
+    \centering
+    insert 17, 1, 8, 10, 7, and 5\\
+    \includegraphics[height=0.85\textheight]{graph/exer-3rd-insert-2.png}\\
+  } 
+  \only<+>{
+    \centering
+    insert 17, 1, 8, 10, 7, and 5\\
+    \includegraphics[height=0.85\textheight]{graph/exer-3rd-insert-3.png}\\
+  }   
+  \only<+>{
+    \centering
+    delete 9\\
+    \includegraphics[height=0.85\textheight]{graph/exer-3rd-delete.png}\\
+  }  
+\end{frame}
+
+\begin{frame}
+  \relax
+  {\centering
+    Q \& A\\
+  }
+\end{frame}
+
+% \begin{frame}
+%   \relax
+%   {\centering
+%     let us start by reviewing some of the concepts and topics\\
+%   }
+% \end{frame}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \begin{frame}
+%   \relax
+%   {\centering
+%     reference solution\\
+%   }
+% \end{frame}
+
+%\section{exercises}
+
+% \begin{frame}[label=Q1]
+%   \frametitle{Exercise}
+
+%   \begin{myexer}
+%   \end{myexer}
+
+%   {\centering
+%     \myinternalxref{S1}{Solution}\\
+%   }
+% \end{frame}
+
+% \begin{frame}[label=A1]
+%   \frametitle{Solution to \myinternalxref{Q1}{Exercise}}
+%   \begin{proof}
+    
+%   \end{proof}
+% \end{frame}
+
+
+\end{document}
